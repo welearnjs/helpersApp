@@ -12,7 +12,6 @@ Team 0 - Coordination / Code Review / UI+UX help
 * @marina - ui/ux help - active
 
 Team 1
-* @tores - active
 * @clydelobo - active
 * @apoorv - active
 
@@ -20,6 +19,7 @@ Team 2
 * @oleg  - active
 * @p9gehka - active
 * @romanovsci - active
+* @tores - active
 
 Team 3
 * @imanuel  - active
