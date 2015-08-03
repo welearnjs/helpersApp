@@ -1,8 +1,8 @@
 # #Project-2: Helpers App
 
-CURRENT STATUS OF THE PROJECT: enrollment **27.07-02.08**, leave your github account in **#project-2** channel. Currently enrolled: **15+ members**. Start Date: **03.08**. Project will be done in small groups of 2-3
-
-Level required: **from beginner to advanced**
+CURRENT STATUS OF THE PROJECT: 
+Enrollment has ended, but you can still join by leaving your github account in **#project-2** channel. 
+Start Date: **Project has started**. Level required: **from beginner to advanced**
 
 **Members who joined this open-source project**
 
@@ -34,11 +34,11 @@ Team 4 - initially separate team
 ...you
 
 **Possible groups, before the official start**
-*  group - twitter api
-*  group - twitter api
-*  group - Google maps
-*  group - Google maps
-*  group - Google maps / twitter api
+
+*  Team 1 - twitter api
+*  Team 2 - twitter api
+*  Team 3 - Google maps
+*  Team 4 - Google maps
 
 **Project-2 Description**
 
@@ -52,12 +52,12 @@ We are going to build a web application to track your activity as a helper at We
 ![example](http://i.imgur.com/Xn6lmXP.png)
 
 *Example of a tweet:*
- - Oleg:  @Imanuel helped me on a project-1 at #welearnjs
+ - Oleg:  @Imanuel helped me on a project-1 at #welearnjs 
 
 **What data is needed from every tweet?**
 * @nickname of a person who tweeted
 * @nickname of a person who helped
-* The welearnjs hashtag to filter out needed tweets: #welearnjs
+* The welearnjs hashtag to filter out needed tweets: #welearnjs (or hashtag #help)
 
 It will be location based so our primary interface will consist of a map showing the location of people who suggested someone as a helper and helpers themselves. Approximate Mockup of data taken from Twitter and projected onto a google map.
 
