@@ -17,7 +17,7 @@ Team 1
 * @rumpumpum - active
 
 Team 2
-* @oleg - Team leader
+* @oleg - leader
 * @p9gehka - active
 * @romanovsci - active
 * @tores - active
