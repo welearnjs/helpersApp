@@ -15,6 +15,7 @@ Team 1
 * @apoorv - leader
 * @clydelobo - active
 * @rumpumpum - active
+* @craig - active
 
 Team 2
 * @oleg - leader
@@ -26,6 +27,7 @@ Team 3
 * @imanuel - leader
 * @angelocordon - active
 * @katin-exp - active
+* @kayshay005 - active
 
 Team 4 - initially separate team
 * @alan  - leader
