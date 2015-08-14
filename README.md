@@ -87,5 +87,10 @@ Zoom lvl3. Members from one location will be combined into groups, the dot prese
 **Additional Resources**
 
 *https://github.com/pubnub/tweet-emotion
-*http://joshkrajnak.com/twaps/
+*http://joshkrajnak.com/twaps/ 
 *http://tympanus.net/codrops/2011/04/13/interactive-google-map/comment-page-2/   (old api, but still)
+*https://github.com/impronunciable/Tuiter
+
+Google maps
+*http://jsfiddle.net/salman/4mtyu/ setting a map
+
