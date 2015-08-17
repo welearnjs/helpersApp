@@ -51,7 +51,7 @@ client.stream('statuses/filter', { track: trackQuery }, function(stream){
       var abridgedTweetData = {
         username:tweet.user.screen_name,
         text: tweet.text,
-        mentions: entities.user_mentions
+        mentions: tweet.entities.user_mentions
       }
 
       // if coordinates are present, add them to the new data object
