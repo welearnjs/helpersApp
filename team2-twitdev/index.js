@@ -7,7 +7,16 @@ var app = express();
 var tweetArr = [];
 
 // Routing
-app.use(express.static(__dirname + '/public'));
+app.get('/tweets', function( req, res ){
+  if( tweetArr.length > 0 ){
+    res.json( { tweets: tweetArr } );
+  }
+  else{
+    res.send( { tweets: null } );
+  }
+});
+
+app.use('/', express.static(__dirname + '/public'));
 
 // Config oAuth
 var client = new Twitter({
