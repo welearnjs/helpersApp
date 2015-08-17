@@ -1,0 +1,11 @@
+{
+  "name": "SimpleExpressServer",
+  "version": "0.0.1",
+  "description": "A Node.js App using express",
+  "dependencies": {
+	"express": "*",
+    "event-stream": "*",
+	"socket.io":"*"
+   },
+  "engine": "node >=0.6.x"
+}
