@@ -79,10 +79,10 @@ function buildChart(){
       var size = Math.sqrt(square / (Math.PI * 2));
       var id = dataItem.country_code;
 
-      dataProvider.lines.push({
-        latitudes: [latlong[id].latitude, 50.4422],
-        longitudes: [latlong[id].longitude, 30.5367]
-      });
+     // dataProvider.lines.push({
+     //   latitudes: [latlong[id].latitude, 50.4422],
+     //   longitudes: [latlong[id].longitude, 30.5367]
+     // });
 
       dataProvider.images.push({
         type: "circle",
