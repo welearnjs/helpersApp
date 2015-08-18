@@ -3,9 +3,10 @@
   "version": "0.0.1",
   "description": "A Node.js App using express",
   "dependencies": {
-	"express": "*",
     "event-stream": "*",
-	"socket.io":"*"
-   },
+    "express": "*",
+    "socket.io": "*",
+    "twitter": "^1.2.5"
+  },
   "engine": "node >=0.6.x"
 }
