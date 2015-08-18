@@ -65,28 +65,32 @@ function strencode( data ) {
   return unescape( encodeURIComponent( JSON.stringify( data ) ) );
 }
 
-var trackQuery = '#welearnjs';
+//var trackQuery = '#welearnjs';
+var trackQuery = '#love';
+
 client.stream('statuses/filter', { track: trackQuery }, function(stream){
 
-    stream.on('data', function( tweet ) {
+  stream.on('data', function( tweet ) {
 
-      // create a new data object with just the data we need
-      var abridgedTweetData = {
-        username:tweet.user.screen_name,
-        text: tweet.text,
-        mentions: tweet.entities.user_mentions
-      }
+    // create a new data object with just the data we need
+    var abridgedTweetData = {
+      username: tweet.user.screen_name,
+      text: tweet.text,
+      mentions: tweet.entities.user_mentions
+    }
 
-      // if coordinates are present, add them to the new data object
-      if ( tweet.coordinates !== null ) {
-        abridgedTweetData.lat = tweet.coordinates.coordinates[1];
-        abridgedTweetData.lon = tweet.coordinates.coordinates[0];
-      }
+    // if coordinates are present, add them to the new data object
+    if ( tweet.coordinates !== null ) {
+      abridgedTweetData.lat = tweet.coordinates.coordinates[1];
+      abridgedTweetData.lon = tweet.coordinates.coordinates[0];
 
+      // for the moment, I only want tweets with location data
       tweetArr.push( abridgedTweetData );
 
       var decoded = strencode( abridgedTweetData );
       io.sockets.emit( 'tweet', decoded );
+    }
+
   });
 });
 
