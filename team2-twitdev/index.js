@@ -12,7 +12,7 @@ app.get('/tweets', function( req, res ){
     res.json( { tweets: tweetArr } );
   }
   else{
-    res.send( { tweets: null } );
+    res.json( { tweets: null } );
   }
 });
 
