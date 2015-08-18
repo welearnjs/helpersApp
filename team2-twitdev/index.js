@@ -16,6 +16,29 @@ app.get('/tweets', function( req, res ){
   }
 });
 
+
+app.get('/chart_data', function( req, res ){
+  var helpData = [{
+    username: 'abc',
+    country_code: 'RU',
+    help_count: 10
+  },{
+    username: 'def',
+    country_code: 'ZW',
+    help_count: 4
+  },{
+    username: 'ghi',
+    country_code: 'GB',
+    help_count: 15
+  },{
+    username: 'jkl',
+    country_code: 'AE',
+    help_count: 3
+  }];
+
+  res.json( helpData );
+});
+
 app.use('/', express.static(__dirname + '/public'));
 
 // Config oAuth
