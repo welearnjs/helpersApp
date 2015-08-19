@@ -156,24 +156,44 @@ client.stream('statuses/filter',  trackQuery, function(stream){
 
   stream.on('data', function( tweet ) {
 
+    var userName = tweet.user.screen_name;
+    var hashtags = tweet.entities.hashtags;
+    var mentions = tweet.entities.user_mentions;
+    var location = tweet.coordinates;
+
     // create a new data object with just the data we need
     var abridgedTweetData = {
-      username: tweet.user.screen_name,
+      userName: userName,
       text: tweet.text,
-      mentions: tweet.entities.user_mentions
+      mentions: mentions,
+      timestamp: tweet.timestamp_ms,
     }
 
     // if coordinates are present, add them to the new data object
-    if ( tweet.coordinates !== null ) {
-      abridgedTweetData.lat = tweet.coordinates.coordinates[1];
-      abridgedTweetData.lon = tweet.coordinates.coordinates[0];
-
-      // for the moment, I only want tweets with location data
-      tweetArr.push( abridgedTweetData );
-
-      var decoded = strencode( abridgedTweetData );
-      io.sockets.emit( 'tweet', decoded );
+    if ( location !== null ) {
+      abridgedTweetData.location = {}
+      abridgedTweetData.location.lat = location.coordinates[1];
+      abridgedTweetData.location.lon = location.coordinates[0];
     }
+
+    // check if either the registerhelper or the help hashtag is present using
+    // the hashtagPresent function
+    var registration = hashtagPresent( hashtags, 'registerhelper' );
+    var help = hashtagPresent( hashtags, 'help' );
+
+    if( registration ){
+      registerHelper( userName, location );
+    }
+    else if( help ){
+      addHelpPoints( abridgedTweetData );
+      //extract the user mentions from the tweet an
+    }
+
+
+    tweetArr.push( abridgedTweetData );
+
+    var decoded = strencode( abridgedTweetData );
+    io.sockets.emit( 'tweet', decoded );
 
   });
 });
