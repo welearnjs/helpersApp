@@ -64,10 +64,95 @@ function strencode( data ) {
   return unescape( encodeURIComponent( JSON.stringify( data ) ) );
 }
 
-//var trackQuery = '#welearnjs';
-var trackQuery = '#love';
+// Small function to check whether a hashtag is present in a hashtag array. Very
+// simple filter
+function hashtagPresent( hashtagArr, hashtag){
+  var filteredArray = hashtagArr.filter( function( arg ){
+    return( arg.text.toLowerCase() === hashtag.toLowerCase() )
+  });
 
-client.stream('statuses/filter', { track: trackQuery }, function(stream){
+  if( filteredArray.length > 0 ){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+// Small function to check whether a helper is present in the te,p user array.
+// If present, returns the user, if not, returns false.
+// Very simple filter but should be replaced with db query eventually
+function helperExists( userName ){
+  var helpersFiltered = Helper.tempList.filter( function( arg ){
+    return ( arg.userName === userName )
+  });
+  if( helpersFiltered.length === 0 ){
+    return false;
+  }
+  else{
+    return helpersFiltered[ 0 ];
+  }
+}
+
+function addHelpPoints( tweetData ){
+  var mentionsArray = tweetData.mentions;
+
+  mentionsArray.forEach( function( mention ){
+    var existingHelper = helperExists( mention.name );
+
+    if( existingHelper ){
+      existingHelper.iterate( tweetData );
+    }
+    else{
+      var newUser = registerHelper( mention.name );
+      newUser.iterate( tweetData );
+
+    }
+  });
+
+}
+function registerHelper( userName, location ){
+
+  // check to see whether the helper already exists in the database (or in this
+  // case, the temporary array! )
+  var existingHelper = helperExists( userName );
+
+
+  // if the user doesn't exist already, create a new helper record. If the user
+  // does exist, check whether new location data has been provided, if it has,
+  // add it to the record
+  if( !existingHelper ){
+    var helper = new Helper();
+    helper.userName = userName;
+
+    if( location ){
+      helper.location.lat = location.lat;
+      helper.location.lon = location.lon;
+    }
+    helper.add();
+    return helper;
+  }
+  else{
+    if( location ){
+      if( existingHelper.location.lat !== location.lat ){
+        existingHelper.location.lat = location.lat;
+      }
+      if( existingHelper.location.lon !== location.lon ){
+        existingHelper.location.lon = location.lon;
+      }
+    }
+    return existingHelper;
+  }
+}
+
+// declare the trackQuery object outside of the function call, to simplify the
+// process of adding new paramaters (follow etc )
+var trackQuery = {
+  track: '#welearnjs',
+};
+
+
+client.stream('statuses/filter',  trackQuery, function(stream){
 
   stream.on('data', function( tweet ) {
 
