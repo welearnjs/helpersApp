@@ -1,12 +1,16 @@
 {
-  "name": "SimpleExpressServer",
-  "version": "0.0.1",
-  "description": "A Node.js App using express",
-  "dependencies": {
-    "event-stream": "*",
-    "express": "*",
-    "socket.io": "*",
-    "twitter": "^1.2.5"
-  },
-  "engine": "node >=0.6.x"
+    "name": "SimpleExpressServer",
+    "version": "0.0.1",
+    "description": "A Node.js App using express",
+    "dependencies": {
+        "event-stream": "*",
+        "express": "*",
+        "socket.io": "*",
+        "twitter": "^1.2.5"
+    },
+    "engine": "node >=0.6.x",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/welearnjs/helpersApp.git"
+    }
 }
