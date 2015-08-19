@@ -4,6 +4,8 @@ var express = require('express');
 var credentials = require('./credentials.js');
 var port = process.env.PORT || 3000;
 
+var Helper = require('./helper.js');
+
 var app = express();
 var tweetArr = [];
 
