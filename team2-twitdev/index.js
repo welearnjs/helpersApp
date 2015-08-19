@@ -1,6 +1,7 @@
 var Twitter = require('twitter');
 var es = require('event-stream');
 var express = require('express');
+var credentials = require('./credentials.js');
 var port = process.env.PORT || 3000;
 
 var app = express();
@@ -42,12 +43,8 @@ app.get('/chart_data', function( req, res ){
 app.use('/', express.static(__dirname + '/public'));
 
 // Config oAuth
-var client = new Twitter({
-    consumer_key: 'x',
-    consumer_secret: 'x',
-    access_token_key: 'x',
-    access_token_secret: 'x',
-});
+var twitterCreds = credentials.twitter;
+var client = new Twitter( twitterCreds );
 
 // Server
 var server = require('http').createServer(app);
