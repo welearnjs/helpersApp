@@ -1,7 +1,10 @@
 var Twitter = require('twitter');
 var es = require('event-stream');
 var express = require('express');
+var credentials = require('./credentials.js');
 var port = process.env.PORT || 3000;
+
+var Helper = require('./helper.js');
 
 var app = express();
 var tweetArr = [];
@@ -12,19 +15,38 @@ app.get('/tweets', function( req, res ){
     res.json( { tweets: tweetArr } );
   }
   else{
-    res.send( { tweets: null } );
+    res.json( { tweets: null } );
   }
+});
+
+
+app.get('/chart_data', function( req, res ){
+  var helpData = [{
+    username: 'abc',
+    country_code: 'RU',
+    help_count: 10
+  },{
+    username: 'def',
+    country_code: 'ZW',
+    help_count: 4
+  },{
+    username: 'ghi',
+    country_code: 'GB',
+    help_count: 15
+  },{
+    username: 'jkl',
+    country_code: 'AE',
+    help_count: 3
+  }];
+
+  res.json( helpData );
 });
 
 app.use('/', express.static(__dirname + '/public'));
 
 // Config oAuth
-var client = new Twitter({
-    consumer_key: 'x',
-    consumer_secret: 'x',
-    access_token_key: 'x',
-    access_token_secret: 'x',
-});
+var twitterCreds = credentials.twitter;
+var client = new Twitter( twitterCreds );
 
 // Server
 var server = require('http').createServer(app);
@@ -42,28 +64,137 @@ function strencode( data ) {
   return unescape( encodeURIComponent( JSON.stringify( data ) ) );
 }
 
-var trackQuery = '#welearnjs';
-client.stream('statuses/filter', { track: trackQuery }, function(stream){
+// Small function to check whether a hashtag is present in a hashtag array. Very
+// simple filter
+function hashtagPresent( hashtagArr, hashtag){
+  var filteredArray = hashtagArr.filter( function( arg ){
+    return( arg.text.toLowerCase() === hashtag.toLowerCase() )
+  });
 
-    stream.on('data', function( tweet ) {
+  if( filteredArray.length > 0 ){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
 
-      // create a new data object with just the data we need
-      var abridgedTweetData = {
-        username:tweet.user.screen_name,
-        text: tweet.text,
-        mentions: tweet.entities.user_mentions
+// Small function to check whether a helper is present in the te,p user array.
+// If present, returns the user, if not, returns false.
+// Very simple filter but should be replaced with db query eventually
+function helperExists( userName ){
+  var helpersFiltered = Helper.tempList.filter( function( arg ){
+    return ( arg.userName === userName )
+  });
+  if( helpersFiltered.length === 0 ){
+    return false;
+  }
+  else{
+    return helpersFiltered[ 0 ];
+  }
+}
+
+function addHelpPoints( tweetData ){
+  var mentionsArray = tweetData.mentions;
+
+  mentionsArray.forEach( function( mention ){
+    var existingHelper = helperExists( mention.name );
+
+    if( existingHelper ){
+      existingHelper.iterate( tweetData );
+    }
+    else{
+      var newUser = registerHelper( mention.name );
+      newUser.iterate( tweetData );
+
+    }
+  });
+
+}
+function registerHelper( userName, location ){
+
+  // check to see whether the helper already exists in the database (or in this
+  // case, the temporary array! )
+  var existingHelper = helperExists( userName );
+
+
+  // if the user doesn't exist already, create a new helper record. If the user
+  // does exist, check whether new location data has been provided, if it has,
+  // add it to the record
+  if( !existingHelper ){
+    var helper = new Helper();
+    helper.userName = userName;
+
+    if( location ){
+      helper.location.lat = location.lat;
+      helper.location.lon = location.lon;
+    }
+    helper.add();
+    return helper;
+  }
+  else{
+    if( location ){
+      if( existingHelper.location.lat !== location.lat ){
+        existingHelper.location.lat = location.lat;
       }
-
-      // if coordinates are present, add them to the new data object
-      if ( tweet.coordinates !== null ) {
-        abridgedTweetData.lat = tweet.coordinates.coordinates[1];
-        abridgedTweetData.lon = tweet.coordinates.coordinates[0];
+      if( existingHelper.location.lon !== location.lon ){
+        existingHelper.location.lon = location.lon;
       }
+    }
+    return existingHelper;
+  }
+}
 
-      tweetArr.push( abridgedTweetData );
+// declare the trackQuery object outside of the function call, to simplify the
+// process of adding new paramaters (follow etc )
+var trackQuery = {
+  track: '#welearnjs',
+};
 
-      var decoded = strencode( abridgedTweetData );
-      io.sockets.emit( 'tweet', decoded );
+
+client.stream('statuses/filter',  trackQuery, function(stream){
+
+  stream.on('data', function( tweet ) {
+
+    var userName = tweet.user.screen_name;
+    var hashtags = tweet.entities.hashtags;
+    var mentions = tweet.entities.user_mentions;
+    var location = tweet.coordinates;
+
+    // create a new data object with just the data we need
+    var abridgedTweetData = {
+      userName: userName,
+      text: tweet.text,
+      mentions: mentions,
+      timestamp: tweet.timestamp_ms,
+    }
+
+    // if coordinates are present, add them to the new data object
+    if ( location !== null ) {
+      abridgedTweetData.location = {}
+      abridgedTweetData.location.lat = location.coordinates[1];
+      abridgedTweetData.location.lon = location.coordinates[0];
+    }
+
+    // check if either the registerhelper or the help hashtag is present using
+    // the hashtagPresent function
+    var registration = hashtagPresent( hashtags, 'registerhelper' );
+    var help = hashtagPresent( hashtags, 'help' );
+
+    if( registration ){
+      registerHelper( userName, location );
+    }
+    else if( help ){
+      addHelpPoints( abridgedTweetData );
+      //extract the user mentions from the tweet an
+    }
+
+
+    tweetArr.push( abridgedTweetData );
+
+    var decoded = strencode( abridgedTweetData );
+    io.sockets.emit( 'tweet', decoded );
+
   });
 });
 
