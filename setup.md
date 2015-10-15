@@ -2,6 +2,7 @@
 - git clone
 - cd into folder
 - npm install
+- bower install
 
 ## config file
 - create a config.local.js.

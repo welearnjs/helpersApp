@@ -1,0 +1,22 @@
+{
+  "name": "helpersApp",
+  "main": "index.js",
+  "version": "0.0.0",
+  "homepage": "https://github.com/benhalverson/helpersApp",
+  "authors": [
+    "Ben Halverson <benhalverson33@gmail.com>"
+  ],
+  "description": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.5"
+  }
+}
