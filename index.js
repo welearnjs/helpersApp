@@ -208,18 +208,4 @@ client.stream('statuses/filter',  trackQuery, function(stream){
 //   log.debug
 // })
 
-// 1. Create web server
-// V
 
-// 2. Stream Begin
-// V
-
-// 3. Stream end
-
-
-// 4. Stream interval
-
-
-// 5. Update counter for tweet_creator + helper_suggested, if tweet have hashtag #welearnjs && location
-
-// 6. If tweet doesn't have a location provided, but have a #hashtag, add to a separate array (and also update counter for tweet_creator + helper_suggested)
