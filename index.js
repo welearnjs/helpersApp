@@ -1,7 +1,8 @@
 var Twitter = require('twitter');
 var es = require('event-stream');
 var express = require('express');
-var credentials = require('./credentials.js');
+var config = require('config3');
+// var credentials = require('./credentials.js');
 var port = process.env.PORT || 3000;
 
 var Helper = require('./Helper.js');
@@ -45,7 +46,7 @@ app.get('/chart_data', function( req, res ){
 app.use('/', express.static(__dirname + '/public'));
 
 // Config oAuth
-var twitterCreds = credentials.twitter;
+var twitterCreds = config.twitter;
 var client = new Twitter( twitterCreds );
 
 // Server
@@ -198,8 +199,16 @@ client.stream('statuses/filter',  trackQuery, function(stream){
   });
 });
 
+//TODO setup proper logging
+// app.listen(config.port, config.ip, function(error){
+//   if(error) {
+//     log.error({err: error}, 'Unable to bind port. Aborting');
+//     process.exit(10);
+//   }
+//   log.debug
+// })
 
-// 1. Create web server 
+// 1. Create web server
 // V
 
 // 2. Stream Begin
@@ -214,4 +223,3 @@ client.stream('statuses/filter',  trackQuery, function(stream){
 // 5. Update counter for tweet_creator + helper_suggested, if tweet have hashtag #welearnjs && location
 
 // 6. If tweet doesn't have a location provided, but have a #hashtag, add to a separate array (and also update counter for tweet_creator + helper_suggested)
-
